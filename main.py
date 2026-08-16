@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from stock_data import stock_data
 from strategy import backtest, strategy_1, strategy_2, strategy_3, strategy_4, strategy_5
 
@@ -51,13 +52,27 @@ if strategy_compare == "y":
 hb = df["Buy and Hold"].iloc[-1]
 st = df["Current_Balance"].iloc[-1]
 
-def results(hb, st, initial_balance):
+def sharpe_ratio(returns, periods=252):
+    if returns.std() == 0:
+        return 0
+    return (returns.mean() / returns.std()) * np.sqrt(periods)
+
+def max_drawdown(balance):
+    running_max = balance.cummax()
+    drawdown = (balance - running_max) / running_max
+    return drawdown.min()
+
+def results(hb, st, initial_balance, strategy_returns, strategy_balance):
+    sharpe = sharpe_ratio(strategy_returns)
+    mdd = max_drawdown(strategy_balance)
     print("\n" + "=" * 50)
     print("                    Results")
     print("-" * 50)
     print(f"Buy and Hold Final: ${hb:.2f} ({((hb - initial_balance) / initial_balance) * 100:+.2f}%)")
     print("-" * 50)
     print(f"Strategy Final: ${st:.2f} ({((st - initial_balance) / initial_balance) * 100:+.2f}%)")
+    print(f"Strategy Sharpe Ratio: {sharpe:.2f}")
+    print(f"Strategy Max Drawdown: {mdd * 100:.2f}%")
     print("-" * 50)  
     if st > hb:
         print("Strategy outperformed Buy and Hold")
@@ -69,7 +84,7 @@ buys = df[df["Trigger"] == "Buy"]
 sells = df[df["Trigger"] == "Sell"]
 
 if strategy_compare == "n":
-    results(hb, st, initial_balance)
+    results(hb, st, initial_balance, df["Return"], df["Current_Balance"])
     plt.figure(figsize=(10,6))
     plt.plot(df["Date"], df["Close"], label="Stock Price")
     if strategy_function == strategy_2:
