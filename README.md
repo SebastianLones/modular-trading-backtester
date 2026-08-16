@@ -55,15 +55,15 @@ To switch strategies, change `strategy_function` to any of the built-in strategi
 
 **Price chart with strategy signals** - RSI mean reversion (`strategy_2`) using MSFT, with buy/sell signals and the RSI overlay:
 
-![Price chart with buy/sell signals](images/backtesterimg2.png)
+![Price chart with buy/sell signals](backtesterimg2.png)
 
 **Equity curve** — strategy balance vs. buy-and-hold over time:
 
-![Equity curve vs buy-and-hold](images/backtesterimg3.png)
+![Equity curve vs buy-and-hold](backtesterimg3.png)
 
 **Multi-strategy comparison** (`strategy_compare = "y"`) - all 5 strategies plotted against buy-and-hold, using AAPL:
 
-![Multi-strategy comparison](images/backtesterimg1.png)
+![Multi-strategy comparison](backtesterimg1.png)
 
 ## Requirements
 
